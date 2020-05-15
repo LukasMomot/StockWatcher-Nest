@@ -1,6 +1,8 @@
 import { Injectable, HttpService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { map } from 'rxjs/operators';
+import { StockQuote } from 'src/models/api/stockQuote';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class StocksService {
@@ -14,13 +16,13 @@ export class StocksService {
   /**
    * Get stock price
    */
-  public getStockPrice(symbol: string) {
+  public getStockPrice(symbol: string): Observable<StockQuote> {
     return this.httpService
       .get(
         `${
           this.iexCloudBaseUrl
         }/stock/${symbol}/quote?token=${this.configService.get('IEX_API_KEY')}`,
       )
-      .pipe(map(respose => respose.data));
+      .pipe(map(respose => respose.data as StockQuote));
   }
 }
