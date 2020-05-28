@@ -1,0 +1,15 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Stock {
+  symbol: String!
+  latestPrice: Float!
+  change: Float!
+  companyName: String!
+  primaryExchange: String!
+}
+
+type Query {
+  stock(symbol: String!): Stock!
+}
