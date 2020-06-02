@@ -37,8 +37,8 @@ export class StocksService {
           token: this.configService.get('IEX_API_KEY'),
           types: 'quote',
           symbols: symbols.join()
-        },
+        }
       })
-      .pipe(map(respose => respose.data));
+      .pipe(map(respose => Object.values<any>(respose.data).map(v => v.quote)));
   }
 }
