@@ -19,6 +19,8 @@ export class StocksController {
 
   @Get('mosttraded')
   public getMostTradedStocks() {
-    return 'mostTraded';
+    const mosttraded = ['AAPL', 'FB'];
+
+    return this.stockService.getStockPrices(mosttraded).toPromise();
   }
 }

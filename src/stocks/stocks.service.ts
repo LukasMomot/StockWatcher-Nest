@@ -9,7 +9,7 @@ export class StocksService {
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   private iexCloudBaseUrl = 'https://cloud.iexapis.com/v1';
 
@@ -18,11 +18,27 @@ export class StocksService {
    */
   public getStockPrice(symbol: string): Observable<StockQuote> {
     return this.httpService
-      .get(
-        `${
-          this.iexCloudBaseUrl
-        }/stock/${symbol}/quote?token=${this.configService.get('IEX_API_KEY')}`,
-      )
+      .get(`${this.iexCloudBaseUrl}/stock/${symbol}/quote`, {
+        params: {
+          token: this.configService.get('IEX_API_KEY')
+        }
+      })
       .pipe(map(respose => respose.data as StockQuote));
+  }
+
+  /**
+   * Gets the stock price for given symbols
+   * Executed as batch request
+   */
+  public getStockPrices(symbols: string[]) {
+    return this.httpService
+      .get(`${this.iexCloudBaseUrl}/stock/market/batch`, {
+        params: {
+          token: this.configService.get('IEX_API_KEY'),
+          types: 'quote',
+          symbols: symbols.join()
+        },
+      })
+      .pipe(map(respose => respose.data));
   }
 }
