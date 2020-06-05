@@ -1,4 +1,5 @@
 import { ObjectType, Field, Float } from "@nestjs/graphql";
+import { Company } from "./company.model";
 
 @ObjectType()
 export class Stock {
@@ -16,4 +17,7 @@ export class Stock {
 
     @Field()
     primaryExchange: string;
+
+    @Field(type => Company)
+    company: Company;
 }

@@ -1,4 +1,4 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Parent, ResolveField } from '@nestjs/graphql';
 import { Stock } from './stock.model';
 import { StocksService } from './stocks.service';
 
@@ -12,5 +12,12 @@ export class StocksResolver {
     @Query(returns => Stock)
     async stock(@Args('symbol', { type: () => String }) symbol: string) {
         return this.stockService.getStockPrice(symbol).toPromise();
+    }
+
+    @ResolveField()
+    async company(@Parent() stock: Stock) {
+        const { symbol } = stock;
+
+        return this.stockService.getCompanyInfo(symbol).toPromise();
     }
 }

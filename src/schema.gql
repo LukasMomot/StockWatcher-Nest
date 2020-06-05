@@ -2,12 +2,36 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Company {
+  symbol: String!
+  companyName: String!
+  exchange: String!
+  industry: String!
+  website: String!
+  description: String!
+  CEO: String!
+  securityName: String!
+  issueType: String!
+  sector: String!
+  primarySicCode: Float!
+  employees: Float!
+  tags: [String!]!
+  address: String!
+  address2: String!
+  state: String!
+  city: String!
+  zip: String!
+  country: String!
+  phone: String!
+}
+
 type Stock {
   symbol: String!
   latestPrice: Float!
   change: Float!
   companyName: String!
   primaryExchange: String!
+  company: Company!
 }
 
 type Query {
