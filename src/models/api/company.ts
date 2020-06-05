@@ -1,4 +1,4 @@
-export interface Company {
+export class Company {
     symbol: string;
     companyName: string;
     exchange: string;
