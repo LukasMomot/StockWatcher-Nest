@@ -20,4 +20,10 @@ export class StocksResolver {
 
         return this.stockService.getCompanyInfo(symbol).toPromise();
     }
+
+    @Query(returns => [Stock])
+    async mostradedStocks() {
+        const mostraded = ['FB', 'AAPL', 'MSFT'];
+        return this.stockService.getStockPrices(mostraded).toPromise();
+    }
 }

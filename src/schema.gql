@@ -36,4 +36,5 @@ type Stock {
 
 type Query {
   stock(symbol: String!): Stock!
+  mostradedStocks: [Stock!]!
 }
