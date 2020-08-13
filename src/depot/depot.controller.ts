@@ -1,5 +1,5 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { DepotTrasactionDto } from './models/depotTrasactionDto';
+import { DepotTrasactionDto } from './dtos/depotTrasactionDto';
 
 @Controller('depot')
 export class DepotController {
