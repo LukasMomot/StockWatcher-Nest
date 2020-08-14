@@ -6,10 +6,6 @@ import { Document } from "mongoose"
 
 @Schema()
 export class Depot extends Document {
-    constructor() {
-        super();
-    }
-
     @Prop()
     userId: number;
 
@@ -19,10 +15,10 @@ export class Depot extends Document {
     @Prop()
     pricingOption: DepotPricingOption;
 
-    @Prop()
+    @Prop([Array])
     transactions: Transaction[] = [];
 
-    @Prop()
+    @Prop([Array])
     positions: DepotPosition[] = []
 }
 

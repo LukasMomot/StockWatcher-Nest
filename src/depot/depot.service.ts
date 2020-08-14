@@ -43,10 +43,13 @@ export class DepotService {
             symbol
         });
 
-        // TODO: This update is not working. Check how to update elements of the array
-        // Add position to depot
+        depot.totalBuyPrice += latestPrice
+
         let position = depot.positions.find(p => p.symbol == symbol);
         if (position) {
+            const totalBuyPrice = position.totalBuyPrice + latestPrice;
+            const amount = position.amountOfStocks + amountOfStocks;
+
             position.totalBuyPrice += latestPrice;
             position.amountOfStocks += amountOfStocks;
         } else {
@@ -59,8 +62,7 @@ export class DepotService {
             depot.positions.push(position);
         }
 
-        depot.totalBuyPrice += latestPrice
-        depot.save();
+        await this.depotModel.updateOne({ _id: depot.id }, depot, { upsert: true });
 
         return depot;
     }

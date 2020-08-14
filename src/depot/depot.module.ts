@@ -1,3 +1,4 @@
+import { DepotPosition } from './models/depotPosition';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { DepotController } from './depot.controller';
