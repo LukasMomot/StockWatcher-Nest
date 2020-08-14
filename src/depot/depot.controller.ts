@@ -11,7 +11,7 @@ export class DepotController {
     @Post('buy')
     public async buyStock(@Body() buyStockDto: DepotTrasactionDto) {
         console.log('Buy Stock DTO ', buyStockDto);
-        return true;
+        return await this.depotService.buyStock(buyStockDto);
     }
 
     @Post('sell')

@@ -8,7 +8,7 @@ export class DepotTrasactionDto {
 
     @ApiProperty()
     @IsPositive()
-    amountOfStock: number;
+    amountOfStocks: number;
 
     @ApiProperty()
     @IsNumber()
