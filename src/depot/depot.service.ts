@@ -15,27 +15,54 @@ export class DepotService {
     ) { }
 
     public async buyStock(transaction: DepotTrasactionDto) {
-        const { symbol, amountOfStocks } = transaction;
-        // TODO: Just for testing. Replace with real logic
-        let result = await this.depotModel.create({
-            pricingOption: DepotPricingOption.Free,
-            totalBuyPrice: transaction.limitPrice,
-            userId: 1,
-            transactions: [{
-                amountOfStocks,
-                buyPrice: 200,
-                date: new Date(),
-                symbol
-            }],
-            positions: [{
-                amountOfStocks,
-                symbol,
-                companyName: 'Apple INC',
-                totalBuyPrice: 4957
-            }]
-        })
+        const { symbol, amountOfStocks, userId } = transaction;
+        const { latestPrice, companyName } = await this.stocksService.getStockPrice(symbol).toPromise();
 
-        return result;
+        if (transaction.limitPrice && latestPrice > transaction.limitPrice) {
+            throw new Error('Buy failed. The latest price is higher than limit price');
+        }
+
+        let depot = await this.depotModel.findOne({ userId }).exec();
+
+        // Create new depot
+        if (!depot) {
+            depot = new this.depotModel(<Depot>{
+                userId,
+                totalBuyPrice: 0,
+                pricingOption: DepotPricingOption.Rockstar,
+                transactions: [],
+                positions: [],
+            });
+        }
+
+        // Add transaction to depot
+        depot.transactions.push({
+            amountOfStocks,
+            buyPrice: latestPrice,
+            date: new Date(),
+            symbol
+        });
+
+        // TODO: This update is not working. Check how to update elements of the array
+        // Add position to depot
+        let position = depot.positions.find(p => p.symbol == symbol);
+        if (position) {
+            position.totalBuyPrice += latestPrice;
+            position.amountOfStocks += amountOfStocks;
+        } else {
+            position = {
+                symbol,
+                amountOfStocks,
+                companyName,
+                totalBuyPrice: latestPrice
+            }
+            depot.positions.push(position);
+        }
+
+        depot.totalBuyPrice += latestPrice
+        depot.save();
+
+        return depot;
     }
 
     public sellStock(transaction: DepotTrasactionDto) {

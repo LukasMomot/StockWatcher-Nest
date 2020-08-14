@@ -17,5 +17,5 @@ export class DepotTrasactionDto {
 
     @ApiProperty()
     @IsNumber()
-    depotId: number;
+    userId: number;
 }

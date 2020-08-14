@@ -6,20 +6,24 @@ import { Document } from "mongoose"
 
 @Schema()
 export class Depot extends Document {
+    constructor() {
+        super();
+    }
+
     @Prop()
     userId: number;
 
     @Prop()
-    totalBuyPrice: number;
+    totalBuyPrice: number = 0;
 
     @Prop()
     pricingOption: DepotPricingOption;
 
     @Prop()
-    transactions: Transaction[];
+    transactions: Transaction[] = [];
 
     @Prop()
-    positions: DepotPosition[]
+    positions: DepotPosition[] = []
 }
 
 export const DepotSchema = SchemaFactory.createForClass(Depot);
