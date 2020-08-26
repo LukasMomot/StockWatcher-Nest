@@ -16,3 +16,4 @@ volumes:
 
   # docker exec -it <container-name> bash
   # mongo admin -u root -p rootpassword
+  # docker-compose up -d

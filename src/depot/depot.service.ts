@@ -14,6 +14,11 @@ export class DepotService {
 
     ) { }
 
+    public async getDepot(userId: number) {
+        const depot = await this.depotModel.findOne({ userId });
+        return depot;
+    }
+
     public async buyStock(transaction: DepotTrasactionDto) {
         const { symbol, amountOfStocks, userId } = transaction;
         const { latestPrice, companyName } = await this.stocksService.getStockPrice(symbol).toPromise();
@@ -47,9 +52,6 @@ export class DepotService {
 
         let position = depot.positions.find(p => p.symbol == symbol);
         if (position) {
-            const totalBuyPrice = position.totalBuyPrice + latestPrice;
-            const amount = position.amountOfStocks + amountOfStocks;
-
             position.totalBuyPrice += latestPrice;
             position.amountOfStocks += amountOfStocks;
         } else {
