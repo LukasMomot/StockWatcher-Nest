@@ -1,6 +1,7 @@
 import { DepotService } from './depot.service';
-import { Controller, Post, Body, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, Res, HttpStatus } from '@nestjs/common';
 import { DepotTrasactionDto } from './dtos/depotTrasactionDto';
+import { Response } from 'express';
 
 @Controller('depot')
 export class DepotController {
@@ -9,9 +10,9 @@ export class DepotController {
     }
 
     @Get(':userId')
-    public async getDepot(@Param('userId') userId: number) {
+    public async getDepot(@Res() res: Response, @Param('userId') userId: number) {
         const depot = await this.depotService.getDepot(userId);
-        return depot;
+        return depot ? res.json(depot) : res.status(HttpStatus.NOT_FOUND).send('Depot was not found');
     }
 
     @Post('buy')
