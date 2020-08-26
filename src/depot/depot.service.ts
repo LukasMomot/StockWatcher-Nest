@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Depot } from './models/depot';
 import { Model } from 'mongoose';
 import { DepotPricingOption } from './models/depotPricingOption';
+import { calculatePercentageChange } from 'src/utils/calculation';
 
 @Injectable()
 export class DepotService {
@@ -16,14 +17,17 @@ export class DepotService {
 
     public async getDepot(userId: number) {
         const depot = await this.depotModel.findOne({ userId });
+        // TODO: extract to extra dto type
         let depotDto = { positions: [] };
 
         for (let pos of depot.positions) {
             const currentPrice = (await this.stocksService.getStockPrice(pos.symbol).toPromise()).latestPrice;
             const currentPosValue = pos.amountOfStocks * currentPrice;
+            const percentChange = calculatePercentageChange(currentPosValue, pos.totalBuyPrice);
             depotDto.positions.push({
                 ...pos,
-                currentPosValue
+                currentPosValue,
+                percentChange
             })
         }
 
