@@ -6,6 +6,7 @@ import { Depot } from './models/depot';
 import { Model } from 'mongoose';
 import { DepotPricingOption } from './models/depotPricingOption';
 import { calculatePercentageChange } from 'src/utils/calculation';
+import { StockDto } from './dtos/stockDto';
 
 @Injectable()
 export class DepotService {
@@ -15,23 +16,24 @@ export class DepotService {
 
     ) { }
 
-    public async getDepot(userId: number) {
+    public async getStockFromDepot(userId: number) {
         const depot = await this.depotModel.findOne({ userId });
-        // TODO: extract to extra dto type
-        let depotDto = { positions: [] };
+        const stocks: StockDto[] = [];
 
         for (let pos of depot.positions) {
             const currentPrice = (await this.stocksService.getStockPrice(pos.symbol).toPromise()).latestPrice;
-            const currentPosValue = pos.amountOfStocks * currentPrice;
-            const percentChange = calculatePercentageChange(currentPosValue, pos.totalBuyPrice);
-            depotDto.positions.push({
+            const currentValue = pos.amountOfStocks * currentPrice;
+            const percentChange = calculatePercentageChange(currentValue, pos.totalBuyPrice);
+            const profit = +(pos.totalBuyPrice - currentValue).toFixed(2);
+            stocks.push({
                 ...pos,
-                currentPosValue,
-                percentChange
+                currentValue,
+                percentChange,
+                profit
             })
         }
 
-        return depotDto;
+        return stocks;
     }
 
     public async buyStock(transaction: DepotTrasactionDto) {

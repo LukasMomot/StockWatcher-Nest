@@ -11,7 +11,7 @@ export class DepotController {
 
     @Get(':userId')
     public async getDepot(@Res() res: Response, @Param('userId') userId: number) {
-        const depot = await this.depotService.getDepot(userId);
+        const depot = await this.depotService.getStockFromDepot(userId);
         return depot ? res.json(depot) : res.status(HttpStatus.NOT_FOUND).send('Depot was not found');
     }
 
