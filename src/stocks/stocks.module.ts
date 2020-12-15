@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
     imports: [HttpModule, ConfigModule.forRoot()],
     controllers: [StocksController],
-    providers: [StocksService]
+    providers: [StocksService],
+    exports: [StocksService]
 })
 export class StocksModule { }
